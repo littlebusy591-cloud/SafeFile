@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create account — SafeFile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+</head>
+<body class="auth-page">
+  <!-- Interactive liquid ripple distortion background -->
+  <div class="vault-ripple-bg" data-tint="#6366f1" data-strength="0.16"></div>
+
+  <a class="brand" href="/">
+    <span class="brand-mark" data-icon="shield"></span>SafeFile
+  </a>
+
+  <main class="auth-card">
+    <div data-masked-heading="Create account" data-tag="h1" data-scale="0.09" data-align="left">Create account</div>
+    <p class="sub">Set up your private encrypted vault in seconds.</p>
+
+    <div class="alert" id="formAlert" role="alert" hidden></div>
+
+    <form id="registerForm" novalidate>
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input class="input" type="text" id="name" name="name" autocomplete="name" maxlength="60" placeholder="e.g. Alex Morgan" required>
+      </div>
+
+      <div class="field">
+        <label for="email">Email address</label>
+        <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="name@example.com" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input class="input" type="password" id="password" name="password" autocomplete="new-password" placeholder="••••••••" required>
+        <span class="hint">At least 8 characters with a letter and a number.</span>
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Confirm password</label>
+        <input class="input" type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" placeholder="••••••••" required>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg" type="submit" id="submitBtn">
+        <span>Create Personal Vault</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+  </main>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app-bundle.js"></script>
+</body>
+</html>

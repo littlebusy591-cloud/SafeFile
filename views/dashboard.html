@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — SafeFile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+</head>
+<body>
+<!-- Interactive liquid ripple distortion background across the whole app -->
+<div class="vault-ripple-bg" data-tint="#38bdf8" data-strength="0.14"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/dashboard">
+      <span class="brand-mark" data-icon="shield"></span>SafeFile
+    </a>
+    <nav class="nav" aria-label="Main menu">
+      <a class="nav-link active" href="/dashboard"><span data-icon="home"></span>Dashboard</a>
+      <a class="nav-link" href="/upload"><span data-icon="upload"></span>Upload document</a>
+      <a class="nav-link" href="/documents"><span data-icon="folder"></span>My documents</a>
+      <a class="nav-link" href="/activity"><span data-icon="activity"></span>Activity</a>
+      <a class="nav-link" href="/profile"><span data-icon="user"></span>Profile</a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="avatar" id="userInitial">?</span>
+        <div><div class="user-name" id="userName">Loading...</div><div class="user-email" id="userEmail"></div></div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn" type="button"><span data-icon="logout"></span>Log out</button>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div>
+    <header class="topbar">
+      <button id="menuBtn" type="button" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><span data-icon="menu"></span></button>
+      <span class="brand">SafeFile</span>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <div class="page-masked-title" data-masked-heading="Vault Dashboard" data-tag="h1" data-scale="0.065">Vault Dashboard</div>
+          <p>An overview of your encrypted documents and vault activity.</p>
+        </div>
+        <a class="btn btn-primary btn-lg" href="/upload"><span data-icon="upload"></span>Upload document</a>
+      </div>
+
+      <div class="alert alert-error" id="pageAlert" role="alert" hidden></div>
+
+      <!-- 3D Interactive Vault Document Carousel -->
+      <div id="react-dashboard-carousel"></div>
+
+      <!-- Summary Stats -->
+      <section class="stats" aria-label="Summary">
+        <div class="stat">
+          <span class="icon-tile" data-icon="file"></span>
+          <div>
+            <div class="stat-value" id="statTotal">-</div>
+            <div class="stat-label">Total documents</div>
+          </div>
+        </div>
+        <div class="stat">
+          <span class="icon-tile" data-icon="database"></span>
+          <div>
+            <div class="stat-value" id="statSize">-</div>
+            <div class="stat-label">Storage used</div>
+          </div>
+        </div>
+        <div class="stat">
+          <span class="icon-tile" data-icon="clock"></span>
+          <div>
+            <div class="stat-value" id="statLast">-</div>
+            <div class="stat-label">Last upload</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Document Categories Grid -->
+      <section class="card mb" id="categories" aria-labelledby="catHeading">
+        <div class="card-head"><h2 id="catHeading">Document categories</h2></div>
+        <div class="category-grid" id="categoryGrid"></div>
+      </section>
+
+      <!-- Recent Uploads & Activity -->
+      <div class="two-col">
+        <section class="card" aria-labelledby="recentHeading">
+          <div class="card-head">
+            <h2 id="recentHeading">Recently uploaded</h2>
+            <a href="/documents">View all</a>
+          </div>
+          <ul class="doc-list" id="recentList"></ul>
+        </section>
+
+        <section class="card" aria-labelledby="activityHeading">
+          <div class="card-head">
+            <h2 id="activityHeading">Recent activity</h2>
+            <a href="/activity">View all</a>
+          </div>
+          <ul class="activity-list" id="activityList"></ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/js/icons.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/app-bundle.js"></script>
+</body>
+</html>

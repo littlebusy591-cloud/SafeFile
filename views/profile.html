@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile — SafeFile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+</head>
+<body>
+<!-- Interactive liquid ripple distortion background across the whole app -->
+<div class="vault-ripple-bg" data-tint="#38bdf8" data-strength="0.14"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/dashboard"><span class="brand-mark" data-icon="shield"></span>SafeFile</a>
+    <nav class="nav" aria-label="Main menu">
+      <a class="nav-link" href="/dashboard"><span data-icon="home"></span>Dashboard</a>
+      <a class="nav-link" href="/upload"><span data-icon="upload"></span>Upload document</a>
+      <a class="nav-link" href="/documents"><span data-icon="folder"></span>My documents</a>
+      <a class="nav-link" href="/activity"><span data-icon="activity"></span>Activity</a>
+      <a class="nav-link active" href="/profile"><span data-icon="user"></span>Profile</a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="avatar" id="userInitial">?</span>
+        <div><div class="user-name" id="userName">Loading...</div><div class="user-email" id="userEmail"></div></div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn" type="button"><span data-icon="logout"></span>Log out</button>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div>
+    <header class="topbar">
+      <button id="menuBtn" type="button" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><span data-icon="menu"></span></button>
+      <span class="brand">SafeFile</span>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <div class="page-masked-title" data-masked-heading="Vault Profile" data-tag="h1" data-scale="0.065">Vault Profile</div>
+          <p>Manage your account credentials and security preferences.</p>
+        </div>
+      </div>
+
+      <section class="card">
+        <div class="profile-top">
+          <span class="avatar" id="profileInitial">?</span>
+          <div>
+            <h2 id="profileName">Loading...</h2>
+            <p id="profileEmail"></p>
+          </div>
+        </div>
+        <dl class="profile-facts">
+          <div><dt>Member since</dt><dd id="factJoined">-</dd></div>
+          <div><dt>Encrypted Documents</dt><dd id="factDocs">-</dd></div>
+          <div><dt>Storage Used</dt><dd id="factSize">-</dd></div>
+        </dl>
+      </section>
+
+      <section class="card form-narrow">
+        <div class="card-head"><h2>Update Account Name</h2></div>
+        <div class="alert" id="nameAlert" role="alert" hidden></div>
+        <form id="nameForm" novalidate>
+          <div class="field">
+            <label for="name">Display Name</label>
+            <input class="input" type="text" id="name" maxlength="60" required>
+          </div>
+          <button class="btn btn-primary" type="submit" id="nameBtn">Save Name</button>
+        </form>
+      </section>
+
+      <section class="card form-narrow">
+        <div class="card-head"><h2>Change Password</h2></div>
+        <div class="alert" id="passwordAlert" role="alert" hidden></div>
+        <form id="passwordForm" novalidate>
+          <div class="field">
+            <label for="currentPassword">Current Password</label>
+            <input class="input" type="password" id="currentPassword" autocomplete="current-password" required>
+          </div>
+          <div class="field">
+            <label for="newPassword">New Password</label>
+            <input class="input" type="password" id="newPassword" autocomplete="new-password" required>
+            <span class="hint">At least 8 characters with a letter and a number.</span>
+          </div>
+          <div class="field">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input class="input" type="password" id="confirmPassword" autocomplete="new-password" required>
+          </div>
+          <button class="btn btn-primary" type="submit" id="passwordBtn">Update Password</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="/js/icons.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/profile.js"></script>
+<script src="/js/app-bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="mesh" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="30%" stop-color="#818cf8"/>
+      <stop offset="60%" stop-color="#c084fc"/>
+      <stop offset="85%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <filter id="blurFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="35"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="600" fill="url(#mesh)"/>
+  <g filter="url(#blurFilter)">
+    <circle cx="200" cy="200" r="280" fill="#ffffff" opacity="0.35"/>
+    <circle cx="700" cy="400" r="320" fill="#06b6d4" opacity="0.6"/>
+    <circle cx="1000" cy="150" r="250" fill="#fb7185" opacity="0.5"/>
+  </g>
+</svg>

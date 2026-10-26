@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My documents — SafeFile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+</head>
+<body>
+<!-- Interactive liquid ripple distortion background across the whole app -->
+<div class="vault-ripple-bg" data-tint="#38bdf8" data-strength="0.14"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/dashboard"><span class="brand-mark" data-icon="shield"></span>SafeFile</a>
+    <nav class="nav" aria-label="Main menu">
+      <a class="nav-link" href="/dashboard"><span data-icon="home"></span>Dashboard</a>
+      <a class="nav-link" href="/upload"><span data-icon="upload"></span>Upload document</a>
+      <a class="nav-link active" href="/documents"><span data-icon="folder"></span>My documents</a>
+      <a class="nav-link" href="/activity"><span data-icon="activity"></span>Activity</a>
+      <a class="nav-link" href="/profile"><span data-icon="user"></span>Profile</a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="avatar" id="userInitial">?</span>
+        <div><div class="user-name" id="userName">Loading...</div><div class="user-email" id="userEmail"></div></div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn" type="button"><span data-icon="logout"></span>Log out</button>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div>
+    <header class="topbar">
+      <button id="menuBtn" type="button" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><span data-icon="menu"></span></button>
+      <span class="brand">SafeFile</span>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <div class="page-masked-title" data-masked-heading="My documents" data-tag="h1" data-scale="0.065">My documents</div>
+          <p>Search, filter, view in 3D, download or delete your files.</p>
+        </div>
+        <a class="btn btn-primary btn-lg" href="/upload"><span data-icon="upload"></span>Upload document</a>
+      </div>
+
+      <!-- 3D Vault Orbit View Toggle -->
+      <div id="react-documents-3d"></div>
+
+      <section class="card">
+        <div class="toolbar">
+          <div class="search">
+            <span data-icon="search"></span>
+            <input class="input" type="search" id="searchInput" placeholder="Search by title..." aria-label="Search documents by title" maxlength="100">
+          </div>
+          <select class="input" id="categoryFilter" aria-label="Filter by category">
+            <option value="">All categories</option>
+          </select>
+        </div>
+
+        <div class="alert alert-error" id="pageAlert" role="alert" hidden></div>
+        <ul class="doc-list" id="docList"></ul>
+        <div class="result-count" id="resultCount" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<dialog id="deleteDialog" aria-labelledby="deleteTitle">
+  <h2 id="deleteTitle">Delete this document?</h2>
+  <p id="deleteText"></p>
+  <div class="dialog-actions">
+    <button class="btn btn-ghost" id="cancelDelete" type="button">Keep it</button>
+    <button class="btn btn-danger" id="confirmDelete" type="button">Delete document</button>
+  </div>
+</dialog>
+
+<script src="/js/icons.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/documents.js"></script>
+<script src="/js/app-bundle.js"></script>
+</body>
+</html>

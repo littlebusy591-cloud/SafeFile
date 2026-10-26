@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload document — SafeFile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+</head>
+<body>
+<!-- Interactive liquid ripple distortion background across the whole app -->
+<div class="vault-ripple-bg" data-tint="#38bdf8" data-strength="0.14"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/dashboard"><span class="brand-mark" data-icon="shield"></span>SafeFile</a>
+    <nav class="nav" aria-label="Main menu">
+      <a class="nav-link" href="/dashboard"><span data-icon="home"></span>Dashboard</a>
+      <a class="nav-link active" href="/upload"><span data-icon="upload"></span>Upload document</a>
+      <a class="nav-link" href="/documents"><span data-icon="folder"></span>My documents</a>
+      <a class="nav-link" href="/activity"><span data-icon="activity"></span>Activity</a>
+      <a class="nav-link" href="/profile"><span data-icon="user"></span>Profile</a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <span class="avatar" id="userInitial">?</span>
+        <div><div class="user-name" id="userName">Loading...</div><div class="user-email" id="userEmail"></div></div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn" type="button"><span data-icon="logout"></span>Log out</button>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div>
+    <header class="topbar">
+      <button id="menuBtn" type="button" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false"><span data-icon="menu"></span></button>
+      <span class="brand">SafeFile</span>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <div class="page-masked-title" data-masked-heading="Upload document" data-tag="h1" data-scale="0.065">Upload document</div>
+          <p>Encrypt and store a file securely in your vault.</p>
+        </div>
+      </div>
+
+      <section class="card form-narrow">
+        <div class="alert" id="formAlert" role="alert" hidden></div>
+
+        <form id="uploadForm" novalidate>
+          <div class="field">
+            <label for="file">Document file</label>
+            <label class="file-drop" for="file">
+              <span class="icon" data-icon="upload"></span>
+              <span class="file-name" id="fileName">Drop your file here or click to browse</span>
+              <span class="hint" id="fileHint">Supported formats: PDF, DOC, DOCX, TXT, PNG, JPG (up to 10 MB)</span>
+              <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg">
+            </label>
+          </div>
+
+          <div class="field">
+            <label for="title">Document title</label>
+            <input class="input" type="text" id="title" name="title" maxlength="100" required placeholder="e.g. Passport Copy or Tax Filing 2026">
+          </div>
+
+          <div class="field">
+            <label for="description">Description <span class="text-muted">(optional)</span></label>
+            <textarea class="input" id="description" name="description" maxlength="500" placeholder="Add any details, notes or references to help you find this later..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select class="input" id="category" name="category" required>
+              <option value="">Choose a category</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary btn-lg" type="submit" id="submitBtn">
+            <span data-icon="upload"></span>
+            <span>Encrypt &amp; Upload Document</span>
+          </button>
+        </form>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="/js/icons.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/upload.js"></script>
+<script src="/js/app-bundle.js"></script>
+</body>
+</html>

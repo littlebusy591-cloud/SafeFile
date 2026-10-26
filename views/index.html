@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeFile — Secure Document Vault</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+  <style>
+    /* ── Base resets ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      background: #060911;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .lp-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      background: rgba(6, 9, 17, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .lp-nav__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.03em;
+    }
+    .lp-nav__brand-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+    }
+    .lp-nav__links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .lp-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      outline: none;
+    }
+    .lp-btn--ghost {
+      color: #94a3b8;
+      background: transparent;
+    }
+    .lp-btn--ghost:hover { color: #f8fafc; background: rgba(255,255,255,0.07); }
+    .lp-btn--primary {
+      background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(56,189,248,0.25);
+    }
+    .lp-btn--primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 32px rgba(56,189,248,0.45);
+    }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    .lp-hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 48px 80px;
+      gap: 48px;
+      overflow: hidden;
+    }
+    /* Ripple background fills full hero */
+    #react-ripple-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    /* Subtle noise overlay on top of ripple */
+    .lp-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 25% 50%, rgba(6,9,17,0.45) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 70% at 75% 50%, rgba(6,9,17,0.7) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .lp-hero__left {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* MaskedHeading wrapper */
+    #react-heading {
+      display: block;
+      width: 100%;
+      margin-bottom: 22px;
+      min-height: 120px;
+    }
+
+    .lp-hero__sub {
+      font-size: 17px;
+      line-height: 1.7;
+      color: #94a3b8;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+    .lp-hero__sub strong { color: #cbd5e1; }
+
+    .lp-hero__cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .lp-btn--lg {
+      padding: 14px 28px;
+      font-size: 15px;
+      border-radius: 12px;
+    }
+    .lp-btn--outline {
+      color: #94a3b8;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.12);
+    }
+    .lp-btn--outline:hover {
+      color: #f8fafc;
+      border-color: rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Trust pill */
+    .lp-trust {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 32px;
+      padding: 8px 16px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      color: #7dd3fc;
+      font-weight: 500;
+    }
+    .lp-trust__dot {
+      width: 6px; height: 6px;
+      background: #38bdf8;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.75); }
+    }
+
+    .lp-hero__right {
+      position: relative;
+      z-index: 2;
+      height: 560px;
+    }
+    #react-carousel {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Stats bar ────────────────────────────────────────── */
+    .lp-stats {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .lp-stat {
+      padding: 32px 40px;
+      background: rgba(6,9,17,0.9);
+      backdrop-filter: blur(8px);
+    }
+    .lp-stat__value {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    .lp-stat__label {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* ── Features ─────────────────────────────────────────── */
+    .lp-section {
+      padding: 100px 48px;
+      position: relative;
+    }
+    .lp-section--dark { background: rgba(0,0,0,0.3); }
+
+    .lp-section__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .lp-section__eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      margin-bottom: 14px;
+    }
+    .lp-section__title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: #f8fafc;
+      margin-bottom: 16px;
+    }
+    .lp-section__desc {
+      font-size: 17px;
+      color: #64748b;
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* Feature grid */
+    .lp-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .lp-feature {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .lp-feature::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--feat-accent, #38bdf8), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .lp-feature:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-4px); }
+    .lp-feature:hover::before { opacity: 1; }
+
+    .lp-feature__icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      margin-bottom: 18px;
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.2);
+    }
+    .lp-feature__title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .lp-feature__desc {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.65;
+    }
+
+    /* ── How it works ─────────────────────────────────────── */
+    .lp-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .lp-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: calc(16.66% + 28px); right: calc(16.66% + 28px);
+      height: 1px;
+      background: linear-gradient(90deg, #38bdf8, #6366f1, #38bdf8);
+      opacity: 0.4;
+    }
+    .lp-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 32px;
+    }
+    .lp-step__num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 24px;
+      box-shadow: 0 0 30px rgba(56,189,248,0.4);
+      position: relative;
+      z-index: 1;
+    }
+    .lp-step__title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .lp-step__desc {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.65;
+    }
+
+    /* ── CTA band ─────────────────────────────────────────── */
+    .lp-cta {
+      padding: 100px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .lp-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(56,189,248,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .lp-cta__title {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: #f8fafc;
+      margin-bottom: 16px;
+    }
+    .lp-cta__sub {
+      font-size: 17px;
+      color: #64748b;
+      margin-bottom: 40px;
+    }
+    .lp-cta__actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .lp-footer {
+      padding: 32px 48px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #475569;
+    }
+    .lp-footer__brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    /* ── Security badge strip ────────────────────────────── */
+    .lp-badges {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .lp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    .lp-badge span { font-size: 14px; }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .lp-nav { padding: 16px 24px; }
+      .lp-hero {
+        grid-template-columns: 1fr;
+        padding: 100px 24px 60px;
+        min-height: auto;
+      }
+      .lp-hero__right { height: 400px; order: -1; }
+      .lp-stats { grid-template-columns: 1fr; }
+      .lp-features { grid-template-columns: 1fr; }
+      .lp-steps { grid-template-columns: 1fr; gap: 40px; }
+      .lp-steps::before { display: none; }
+      .lp-section { padding: 64px 24px; }
+      .lp-cta { padding: 64px 24px; }
+      .lp-footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────── -->
+  <nav class="lp-nav">
+    <a class="lp-nav__brand" href="/">
+      <span class="lp-nav__brand-icon">🔒</span>
+      SafeFile
+    </a>
+    <div class="lp-nav__links">
+      <a class="lp-btn lp-btn--ghost" href="/login">Log in</a>
+      <a class="lp-btn lp-btn--primary" href="/register">Create account</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────── -->
+  <section class="lp-hero">
+
+    <!-- RippleDistortion background -->
+    <div id="react-ripple-bg"></div>
+
+    <!-- Left: Heading + CTA -->
+    <div class="lp-hero__left">
+      <div id="react-heading"></div>
+
+      <p class="lp-hero__sub">
+        SafeFile is your <strong>personal encrypted document vault</strong>. Upload certificates, IDs, contracts and bills once — search, download and manage them from anywhere.
+      </p>
+
+      <div class="lp-hero__cta">
+        <a class="lp-btn lp-btn--primary lp-btn--lg" href="/register">
+          ✦ Create free vault
+        </a>
+        <a class="lp-btn lp-btn--outline lp-btn--lg" href="/login">
+          Sign in
+        </a>
+      </div>
+
+      <div class="lp-trust">
+        <span class="lp-trust__dot"></span>
+        AES-256 encrypted · Zero-knowledge · Your data stays yours
+      </div>
+    </div>
+
+    <!-- Right: Circular Carousel -->
+    <div class="lp-hero__right">
+      <div id="react-carousel"></div>
+    </div>
+
+  </section>
+
+  <!-- ── Stats bar ──────────────────────────────────────── -->
+  <div class="lp-stats">
+    <div class="lp-stat">
+      <div class="lp-stat__value">256-bit</div>
+      <div class="lp-stat__label">AES encryption on every file</div>
+    </div>
+    <div class="lp-stat">
+      <div class="lp-stat__value">8 types</div>
+      <div class="lp-stat__label">Document categories supported</div>
+    </div>
+    <div class="lp-stat">
+      <div class="lp-stat__value">100%</div>
+      <div class="lp-stat__label">Private — only you can access your vault</div>
+    </div>
+  </div>
+
+  <!-- ── Features ──────────────────────────────────────── -->
+  <section class="lp-section">
+    <div class="lp-section__header">
+      <span class="lp-section__eyebrow">Why SafeFile</span>
+      <h2 class="lp-section__title">Everything you need, nothing you don't</h2>
+      <p class="lp-section__desc">Built to keep your documents private, organised, and always at your fingertips.</p>
+    </div>
+    <div class="lp-features">
+      <div class="lp-feature" style="--feat-accent:#38bdf8">
+        <div class="lp-feature__icon">🔐</div>
+        <div class="lp-feature__title">Only you can open your files</div>
+        <div class="lp-feature__desc">Every document belongs to your account. Other users cannot see, download, or delete it — not even the server admin.</div>
+      </div>
+      <div class="lp-feature" style="--feat-accent:#a855f7">
+        <div class="lp-feature__icon">🔍</div>
+        <div class="lp-feature__title">Find a file in seconds</div>
+        <div class="lp-feature__desc">Search by title or filter by category — Identity, Work, Finance, Health, Legal and more — so the right document is never buried.</div>
+      </div>
+      <div class="lp-feature" style="--feat-accent:#10b981">
+        <div class="lp-feature__icon">📜</div>
+        <div class="lp-feature__title">A complete activity history</div>
+        <div class="lp-feature__desc">See exactly when each file was uploaded, downloaded or deleted. Full audit trail, always on.</div>
+      </div>
+      <div class="lp-feature" style="--feat-accent:#f59e0b">
+        <div class="lp-feature__icon">⚡</div>
+        <div class="lp-feature__title">Instant upload &amp; download</div>
+        <div class="lp-feature__desc">PDF, DOCX, TXT, JPG, PNG — up to 10 MB each. Add a title, description and category in seconds.</div>
+      </div>
+      <div class="lp-feature" style="--feat-accent:#ec4899">
+        <div class="lp-feature__icon">🛡️</div>
+        <div class="lp-feature__title">Security-hardened backend</div>
+        <div class="lp-feature__desc">Helmet security headers, rate limiting, CSRF protection, bcrypt passwords, and session storage in MongoDB — out of the box.</div>
+      </div>
+      <div class="lp-feature" style="--feat-accent:#06b6d4">
+        <div class="lp-feature__icon">☁️</div>
+        <div class="lp-feature__title">Cloud-ready architecture</div>
+        <div class="lp-feature__desc">Runs locally today, ready for AWS S3, EC2 and CloudWatch tomorrow. Designed with the cloud in mind.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it works ──────────────────────────────────── -->
+  <section class="lp-section lp-section--dark">
+    <div class="lp-section__header">
+      <span class="lp-section__eyebrow">Getting started</span>
+      <h2 class="lp-section__title">Up and running in three steps</h2>
+      <p class="lp-section__desc">No setup required. No credit card. Just create an account and your vault is ready.</p>
+    </div>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step__num">1</div>
+        <div class="lp-step__title">Create your vault</div>
+        <div class="lp-step__desc">Sign up with your email and a password. Your account is your private key to the vault.</div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step__num">2</div>
+        <div class="lp-step__title">Upload a document</div>
+        <div class="lp-step__desc">Give it a title, a short description and pick a category. PDF, Word, text and image files all work.</div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step__num">3</div>
+        <div class="lp-step__title">Find it when you need it</div>
+        <div class="lp-step__desc">Search, filter, preview, download or delete your documents from one clean dashboard.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────── -->
+  <section class="lp-cta">
+    <h2 class="lp-cta__title">Ready to secure your documents?</h2>
+    <p class="lp-cta__sub">Your vault is free and ready in seconds.</p>
+    <div class="lp-cta__actions">
+      <a class="lp-btn lp-btn--primary lp-btn--lg" href="/register">✦ Create free account</a>
+      <a class="lp-btn lp-btn--outline lp-btn--lg" href="/login">Sign in to vault</a>
+    </div>
+    <div class="lp-badges">
+      <span class="lp-badge"><span>🔒</span> AES-256 Encrypted</span>
+      <span class="lp-badge"><span>🛡️</span> CSRF Protected</span>
+      <span class="lp-badge"><span>🚦</span> Rate Limited</span>
+      <span class="lp-badge"><span>🍪</span> Secure Sessions</span>
+      <span class="lp-badge"><span>☁️</span> Cloud Ready</span>
+      <span class="lp-badge"><span>📱</span> Responsive</span>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────── -->
+  <footer class="lp-footer">
+    <a class="lp-footer__brand" href="/">🔒 SafeFile</a>
+    <span>Cloud Computing mini-project · Built with Node.js, Express &amp; MongoDB</span>
+    <span>AES-256 · bcrypt · Helmet · express-session</span>
+  </footer>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/app-bundle.js"></script>
+</body>
+</html>

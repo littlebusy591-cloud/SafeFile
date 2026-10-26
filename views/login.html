@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in — SafeFile</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/js/app-bundle.css">
+</head>
+<body class="auth-page">
+  <!-- Interactive liquid ripple distortion background -->
+  <div class="vault-ripple-bg" data-tint="#38bdf8" data-strength="0.16"></div>
+
+  <a class="brand" href="/">
+    <span class="brand-mark" data-icon="shield"></span>SafeFile
+  </a>
+
+  <main class="auth-card">
+    <div data-masked-heading="Welcome back" data-tag="h1" data-scale="0.09" data-align="left">Welcome back</div>
+    <p class="sub">Log in to decrypt and access your documents.</p>
+
+    <div class="alert" id="formAlert" role="alert" hidden></div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email address</label>
+        <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="name@example.com" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input class="input" type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg" type="submit" id="submitBtn">
+        <span>Log in to Vault</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">New to SafeFile? <a href="/register">Create a free vault</a></p>
+  </main>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app-bundle.js"></script>
+</body>
+</html>

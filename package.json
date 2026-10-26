@@ -1,0 +1,33 @@
+{
+  "name": "safefile",
+  "version": "1.0.0",
+  "description": "SafeFile - Secure Document Vault (college Cloud Computing mini-project)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "esbuild src/app.jsx --bundle --minify --outfile=public/js/app-bundle.js --loader:.jsx=jsx --loader:.css=css --jsx=automatic --platform=browser --target=es2020"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.7",
+    "esbuild": "^0.28.2",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "gsap": "^3.15.0",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.9.5",
+    "multer": "^2.0.0",
+    "ogl": "^1.0.11",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  }
+}
